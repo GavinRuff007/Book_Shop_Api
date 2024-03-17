@@ -53,6 +53,14 @@ public class BookServiceImpl implements BookService{
                         .collect((Collectors.toList()));
     }
 
+    @Override
+    public BookResponse findById(Long id) {
+        Book book =  bookRep.findById(id)
+                .orElseThrow(() -> new RuleException("book.not.found"));
+        return createBookResponse(book);
+
+    }
+
     private Book createBook(BookRequest bookRequest){
         return Book.builder()
                 .name(bookRequest.getName())

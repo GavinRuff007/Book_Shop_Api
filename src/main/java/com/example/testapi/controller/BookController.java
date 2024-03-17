@@ -37,4 +37,9 @@ public class BookController {
                 bookService.findByname(name)
         );
     }
+    @GetMapping("/id/{id}")
+    public ResponseEntity<BookResponse> findById(@PathVariable Long id){
+        return ResponseEntity.ok(bookService.findById(id));
+
+    }
 }
