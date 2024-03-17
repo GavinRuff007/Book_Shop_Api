@@ -4,11 +4,10 @@ import com.example.testapi.dto.request.BookRequest;
 import com.example.testapi.dto.response.BookResponse;
 import com.example.testapi.service.book.BookService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/book")
@@ -23,5 +22,10 @@ public class BookController {
     @PostMapping
     public ResponseEntity<BookResponse> save(@RequestBody @Valid BookRequest book){
       return ResponseEntity.ok(bookService.save(book));
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<BookResponse>> getAll(Pageable pageable){
+        return  ResponseEntity.ok(bookService.findAll(pageable));
     }
 }
