@@ -9,7 +9,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 @Service
 public class BookServiceImpl implements BookService{
 
@@ -37,6 +40,17 @@ public class BookServiceImpl implements BookService{
             throw new RuleException("book.is.exist");
         Book save = bookRep.save(createBook(bookRequest));
         return createBookResponse(save);
+    }
+
+    @Override
+    public List<BookResponse> findByname(String name) {
+       return bookRep.findBookByName("%"+name+"%")
+                .stream().map((book) -> BookResponse.builder()
+                        .name(book.getName())
+                        .id(book.getId())
+                        .price(book.getPrice())
+                        .build())
+                        .collect((Collectors.toList()));
     }
 
     private Book createBook(BookRequest bookRequest){
