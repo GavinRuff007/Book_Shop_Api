@@ -8,7 +8,9 @@ import com.example.testapi.repository.BookRep;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -55,10 +57,15 @@ public class BookServiceImpl implements BookService{
 
     @Override
     public BookResponse findById(Long id) {
-        Book book =  bookRep.findById(id)
-                .orElseThrow(() -> new RuleException("book.not.found"));
-        return createBookResponse(book);
+        return createBookResponse(findByIdReturnBook(id));
 
+    }
+
+    @Override
+    @Transactional
+    public void deleted(Long id) {
+        Book byId = findByIdReturnBook(id);
+        byId.setDeleted(LocalDateTime.now());
     }
 
     private Book createBook(BookRequest bookRequest){
@@ -74,5 +81,9 @@ public class BookServiceImpl implements BookService{
                 .name(book.getName())
                 .price(book.getPrice())
                 .build();
+    }
+    private Book findByIdReturnBook(Long id){
+        return bookRep.findById(id)
+                .orElseThrow(() -> new RuleException("book.not.found"));
     }
 }
