@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
     public void login(UserLoginRequest userLoginRequest) {
        User user =  userRep.findByUsername(userLoginRequest.getUsername())
                 .orElseThrow(() -> new RuleException("user.not.found"));
-       if(user.getPassword().equals(userLoginRequest.getPassword())){
+       if(!user.getPassword().equals(userLoginRequest.getPassword())){
            throw new RuleException("user.not.found");
        }
     }
