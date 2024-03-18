@@ -17,4 +17,6 @@ public class User extends BaseEntity{
     private String username;
 
     private String password;
+    @Column(columnDefinition = "boolean default true")
+    private Boolean enabled = true;
 }
